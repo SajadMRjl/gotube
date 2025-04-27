@@ -2,7 +2,6 @@ package bot
 
 import (
 	"github.com/spf13/viper"
-	"go.uber.org/zap"
 )
 
 type Config struct {
@@ -12,7 +11,7 @@ type Config struct {
 		Timeout int
 	}
 	Server struct {
-		Port      string
+		Port       string
 		WebhookURL string `mapstructure:"webhook_url"`
 	}
 	Logging struct {

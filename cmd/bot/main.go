@@ -7,7 +7,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/sajadMRjl/gotube/internal/bot"
+	"github.com/SajadMRjl/gotube/internal/bot"
 	"go.uber.org/zap"
 )
 
