@@ -10,3 +10,16 @@ server: # do not needed now
 logging:
   level: "info"
   development: false
+
+database:
+  host: "localhost"
+  port: 5432
+  user: "postgres"
+  password: "yourpassword"
+  dbname: "musicbot"
+  sslmode: "disable"
+  timezone: "UTC"
+  max_open_conns: 25
+  max_idle_conns: 5
+  conn_max_lifetime: "5m"
+  log_level: "warn"  # "silent", "error", "warn", "info"

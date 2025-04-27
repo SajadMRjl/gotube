@@ -18,6 +18,20 @@ type Config struct {
 		Level       string
 		Development bool
 	}
+
+	Database struct {
+		Host            string
+		Port            int
+		User            string
+		Password        string
+		DBName          string
+		SSLMode         string `mapstructure:"sslmode"`
+		Timezone        string
+		MaxOpenConns    int    `mapstructure:"max_open_conns"`
+		MaxIdleConns    int    `mapstructure:"max_idle_conns"`
+		ConnMaxLifetime string `mapstructure:"conn_max_lifetime"`
+		LogLevel        string `mapstructure:"log_level"`
+	}
 }
 
 func LoadConfig(configPath string) (*Config, error) {
