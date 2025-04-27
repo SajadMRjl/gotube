@@ -1,40 +1,86 @@
-# Binaries for programs and plugins
+# Binaries
+/bin/
+/telegram-bot
 *.exe
+*.exe~
 *.dll
 *.so
 *.dylib
 
-# Test binary, build artifacts
-*.test
-*.out
-
-# Output of the go coverage tool
-*.cover
-
-# Dependency directories (vendor/)
-vendor/
-
-# Go workspace file
-go.work
-go.work.sum
-
-# IDE/editor specific files
-.vscode/
+# IDE specific files
 .idea/
+.vscode/
 *.swp
 *.swo
+*.code-workspace
 
-# Logs
+# Go files
+go.sum
+*.test
+*.out
+/coverage.txt
+/profile.out
+
+# Dependency directories
+vendor/
+/pkg/
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.test
+
+# Log files
 *.log
+*.log.*
+/logs/
 
 # OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 
-# Configuration files
-*.config
-*.cfg
-*.ini
-*.json
-*.yaml
-*.yml
+# Config files (except template)
+/configs/*.yaml
+!/configs/config.yaml.example
+
+# Test artifacts
+/testdata/
+/tmp/
+
+# Build output
+/dist/
+/artifacts/
+
+# Compiled Object files, Static and Dynamic libs
+*.o
+*.a
+*.lib
+
+# Debug files
+*.dSYM/
+debug
+debug.*
+
+# Coverage files
+*.cover
+*.coverprofile
+
+# Kubernetes files
+k8s/
+*.kubeconfig
+
+# Terraform files
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+.terraform.lock.hcl
+
+# Local development files
+local-dev/

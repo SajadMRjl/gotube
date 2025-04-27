@@ -1,9 +1,9 @@
 telegram:
-  token: "YOUR_BOddvT_TOKEN"
+  token: "YOUR_BOT_TOKEN"
   debug: false
   timeout: 60
 
-server:
+server: # do not needed now
   port: ":8080"
   webhook_url: "https://yourdomain.com"
 
