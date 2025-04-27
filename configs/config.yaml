@@ -1,0 +1,12 @@
+telegram:
+  token: "YOUR_BOT_TOKEN"
+  debug: false
+  timeout: 60
+
+server:
+  port: ":8080"
+  webhook_url: "https://yourdomain.com"
+
+logging:
+  level: "info"
+  development: false
