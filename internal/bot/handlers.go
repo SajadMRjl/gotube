@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"go.uber.org/zap"
 )
 
 func RegisterHandlers(bot *Bot) {
@@ -18,11 +19,24 @@ func RegisterHandlers(bot *Bot) {
 }
 
 func startHandler(ctx context.Context, bot *Bot, update *tgbotapi.Update) error {
-	msg := tgbotapi.NewMessage(update.Message.Chat.ID, 
+	user, err := bot.storage.GetOrCreateUser(ctx, update.Message.From)
+
+	if err != nil {
+		bot.logger.Error("Failed to handle user", zap.Error(err))
+		return err
+	}
+
+	bot.logger.Info("User activity",
+		zap.Int64("user_id", user.TelegramID),
+		zap.String("username", user.Username),
+	)
+
+	user.LastMessageAt = update.Message.Time()
+	msg := tgbotapi.NewMessage(update.Message.Chat.ID,
 		"Welcome to the bot! I'm here to help. Use /help to see available commands.")
 	msg.ReplyToMessageID = update.Message.MessageID
 
-	_, err := bot.api.Send(msg)
+	_, err = bot.api.Send(msg)
 	return err
 }
 
@@ -51,7 +65,7 @@ func echoHandler(ctx context.Context, bot *Bot, update *tgbotapi.Update) error {
 }
 
 func defaultHandler(ctx context.Context, bot *Bot, update *tgbotapi.Update) error {
-	msg := tgbotapi.NewMessage(update.Message.Chat.ID, 
+	msg := tgbotapi.NewMessage(update.Message.Chat.ID,
 		"I don't understand that command. Try /help to see available commands.")
 	_, err := bot.api.Send(msg)
 	return err

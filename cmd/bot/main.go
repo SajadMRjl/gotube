@@ -37,7 +37,12 @@ func main() {
 		logger.Fatal("Failed to initialize database", zap.Error(err))
 	}
 	defer func() {
-		if err := db.Close(); err != nil {
+		sqlDB, err := db.DB.DB()
+		if err != nil {
+			logger.Error("Failed to get SQL DB for closing", zap.Error(err))
+			return
+		}
+		if err := sqlDB.Close(); err != nil {
 			logger.Error("Failed to close database connection", zap.Error(err))
 		}
 	}()
@@ -68,7 +73,7 @@ func main() {
 	}
 }
 
-func initDatabase(config *bot.Config, logger *zap.Logger) (storage.Storage, error) {
+func initDatabase(config *bot.Config, logger *zap.Logger) (*storage.GormStorage, error) {
 	connStr := fmt.Sprintf(
 		"host=%s port=%d user=%s password=%s dbname=%s sslmode=%s TimeZone=%s",
 		config.Database.Host,
@@ -92,21 +97,32 @@ func initDatabase(config *bot.Config, logger *zap.Logger) (storage.Storage, erro
 	}
 
 	// Configure connection pool
-	gormDB, err := db.(*storage.GormStorage).DB.DB()
+	sqlDB, err := db.DB.DB()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get database instance: %w", err)
 	}
 
-	gormDB.SetMaxOpenConns(config.Database.MaxOpenConns)
-	gormDB.SetMaxIdleConns(config.Database.MaxIdleConns)
+	sqlDB.SetMaxOpenConns(config.Database.MaxOpenConns)
+	sqlDB.SetMaxIdleConns(config.Database.MaxIdleConns)
 
 	connMaxLifetime, err := time.ParseDuration(config.Database.ConnMaxLifetime)
 	if err != nil {
 		return nil, fmt.Errorf("invalid connection max lifetime: %w", err)
 	}
-	gormDB.SetConnMaxLifetime(connMaxLifetime)
+	sqlDB.SetConnMaxLifetime(connMaxLifetime)
 
 	logger.Info("Database connection established")
+
+	// Run migrations using the models from the storage package
+	logger.Info("Running database migrations...")
+	if err := db.DB.AutoMigrate(
+		&storage.User{},
+		&storage.Track{},
+	); err != nil {
+		return nil, fmt.Errorf("migration failed: %w", err)
+	}
+	logger.Info("Migrations completed")
+
 	return db, nil
 }
 

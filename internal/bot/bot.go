@@ -3,6 +3,7 @@ package bot
 import (
 	"context"
 
+	"github.com/SajadMRjl/gotube/internal/storage"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"go.uber.org/zap"
 )
@@ -11,12 +12,13 @@ type Bot struct {
 	api      *tgbotapi.BotAPI
 	config   *Config
 	logger   *zap.Logger
+	storage  *storage.GormStorage
 	handlers map[string]HandlerFunc
 }
 
 type HandlerFunc func(ctx context.Context, bot *Bot, update *tgbotapi.Update) error
 
-func NewBot(config *Config, logger *zap.Logger) (*Bot, error) {
+func NewBot(config *Config, logger *zap.Logger, db *storage.GormStorage) (*Bot, error) {
 	botAPI, err := tgbotapi.NewBotAPI(config.Telegram.Token)
 	if err != nil {
 		return nil, err
@@ -29,6 +31,7 @@ func NewBot(config *Config, logger *zap.Logger) (*Bot, error) {
 		config:   config,
 		logger:   logger,
 		handlers: make(map[string]HandlerFunc),
+		storage:  db,
 	}, nil
 }
 

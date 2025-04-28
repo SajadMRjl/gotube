@@ -28,5 +28,9 @@ func NewLogger(level string, development bool) (*zap.Logger, error) {
 	}
 	config.Level = zap.NewAtomicLevelAt(logLevel)
 
+	// Redirect logs to standard output
+	config.OutputPaths = []string{"stdout"}
+	config.ErrorOutputPaths = []string{"stdout"}
+
 	return config.Build()
 }

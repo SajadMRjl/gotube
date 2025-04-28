@@ -12,14 +12,14 @@ logging:
   development: false
 
 database:
-  host: "localhost"
+  host: "gotube_db" # Matches the container_name in docker-compose
   port: 5432
   user: "postgres"
-  password: "yourpassword"
-  dbname: "musicbot"
-  sslmode: "disable"
+  password: "1234" # Must match POSTGRES_PASSWORD from docker-compose
+  dbname: "gotube" # Must match POSTGRES_DB from docker-compose
+  sslmode: "disable" # For development, use "require" in production
   timezone: "UTC"
-  max_open_conns: 25
+  max_open_conns: 25 # Connection pool settings
   max_idle_conns: 5
   conn_max_lifetime: "5m"
-  log_level: "warn"  # "silent", "error", "warn", "info"
+  log_level: "warn" # "silent", "error", "warn", "info"
